@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:adm="http://github.com/adminfaces"
+	template="/WEB-INF/templates/template.xhtml">
+
+	<ui:define name="title">
+        Cadastro Família
+    </ui:define>
+
+	<ui:define name="body">
+		<f:metadata>
+			<f:viewParam name="id" value="#{cadastroFamiliaMB.id}"
+				converter="javax.faces.Long" />
+			<f:event listener="#{cadastroFamiliaMB.inicializar()}"
+				type="preRenderView"></f:event>
+		</f:metadata>
+
+		<adm:breadcrumb
+			title="Cadastro Família #{cadastroFamiliaMB.familia.id}"
+			link="cadastro-familia.xhtml?id=#{cadastroFamiliaMB.familia.id}" />
+		<h:form id="form" >
+			<p:focus />
+
+
+			<div class="box box-primary">
+				<div class="box-header with-border">
+					<div id="main-buttons" class="hidden-sm hidden-xs">
+						
+						<p:commandButton 
+							value="Salvar"
+							update="@form"
+ 							actionListener="#{cadastroFamiliaMB.salvar()}" 
+							icon="fa fa-check" 
+							styleClass="btn-primary" />
+						
+						<p:spacer width="5" />
+						
+						<p:commandButton 
+							value="Excluir" 
+							process="@this" 
+							rendered="#{cadastroFamiliaMB.familia.editando}" 
+							icon="fa fa-trash" 
+							action="#{cadastroFamiliaMB.excluir()}"
+							styleClass="btn-danger" />
+						
+						<p:spacer width="5" />
+						
+						<p:commandButton value="Voltar"
+							action="lista-familia?faces-redirect=true" 
+							process="@this"
+							icon="fa fa-close" />
+
+					</div>
+
+					<p:splitButton 
+						value="Salvar" 
+						update="@form"
+						action="#{cadastroFamiliaMB.salvar()}" 
+						icon="fa fa-check"
+						styleClass="hidden-md hidden-lg btn-primary">
+						
+						<p:menuitem value="Excluir"
+							action="#{cadastroFamiliaMB.excluir()}"
+							rendered="#{cadastroFamiliaMB.familia.editando}" 
+							process="@this"
+							icon="fa fa-trash" />
+						<p:separator />
+						
+						<p:menuitem value="Voltar"
+							action="lista-familia?faces-redirect=true" process="@this"
+							icon="fa fa-close" />
+							
+					</p:splitButton>
+
+
+
+					<p:separator />
+
+					<div class="ui-fluid">
+						<p:panelGrid id="capaPanel" columns="4" layout="grid">
+
+							<p:outputLabel value="Nome da Mãe" for="mae" />
+							<p:inputText id="mae"
+								value="#{cadastroFamiliaMB.familia.nomeMae}" />
+
+							<p:outputLabel value="Endereço" for="end" />
+							<p:inputText id="end"
+								value="#{cadastroFamiliaMB.familia.endereco}" />
+
+							<p:outputLabel value="Bairro" for="bai" />
+							<p:selectOneMenu id="bai"
+								converter="entityConverter"
+								value="#{cadastroFamiliaMB.familia.bairro}">
+								<f:selectItems value="#{cadastroFamiliaMB.bairros}" var="bairro"
+										itemLabel="#{bairro.nome} (#{bairro.cidade.nome})" itemValue="#{bairro}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Ponto de Refererência" for="ref" />
+							<p:inputText id="ref"
+								value="#{cadastroFamiliaMB.familia.pontoReferencia}" />
+
+							<p:outputLabel value="Recebe Ajuda Prog.Social?" for="aju" />
+							<p:selectOneMenu id="aju"
+								value="#{cadastroFamiliaMB.familia.recebeAjudaProgSocial}">
+								<f:selectItems value="#{cadastroFamiliaMB.simnao}" />
+							</p:selectOneMenu>
+
+
+							<p:outputLabel value="Data de inclusão" for="inclusao" />
+							<p:inputText id="inclusao"
+								value="#{cadastroFamiliaMB.familia.criacao}" disabled="true">
+								<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"
+									timeZone="America/Sao_Paulo" />
+							</p:inputText>
+
+						</p:panelGrid>
+					</div>
+					
+					<p:panelGrid  columns="1" layout="grid">
+						<p:column>
+							<h3>Membros</h3>
+						</p:column>
+					</p:panelGrid>
+
+
+					<p:dataTable id="membroTable" widgetVar="membroTable" rows="5"
+						value="#{cadastroFamiliaMB.familia.membros}" var="tarefa"
+						rowKey="#{tarefa.id}" paginator="true" paginatorPosition="bottom"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+						currentPageReportTemplate=""
+						selection="#{cadastroFamiliaMB.membroSelecionado}" 
+						>
+
+						<p:column headerText="Nome">
+							<h:outputLabel value="#{tarefa.nome}" />
+						</p:column>
+
+						<p:column headerText="Parentesco">
+							<h:outputLabel value="#{tarefa.parentesco.getString()}" />
+						</p:column>
+
+						<p:column headerText="Sexo">
+							<h:outputLabel value="#{tarefa.sexo}" />
+						</p:column>
+
+						<p:column headerText="Ocupação">
+							<h:outputLabel value="#{tarefa.ocupacao.nome}" />
+						</p:column>
+
+						<p:column headerText="Estado Civil">
+							<h:outputLabel value="#{tarefa.estadoCivil}" />
+						</p:column>
+
+						<p:column headerText="Nível Instrução">
+							<h:outputLabel value="#{tarefa.nivelInstrucao}" />
+						</p:column>
+
+						<p:column headerText="">
+							<p:commandButton icon="fa fa-edit"	styleClass="btn-primary" process="@this" action="#{cadastroFamiliaMB.editarMembro()}" /> 
+							<p:spacer width="5" />
+							<p:commandButton icon="fa fa-trash"	styleClass="btn-danger" process="@this" action="#{cadastroFamiliaMB.excluirMembro(tarefa)}"  /> 
+						</p:column>
+
+					</p:dataTable>
+					
+					<p:separator />
+					
+					<p:panelGrid id="btnMembro" columns="2" layout="grid" style=" margin-left: -10px">
+						<p:column>
+							 	<p:commandButton value="Novo Membro"  
+							 			 actionListener="#{cadastroFamiliaMB.novoMembro()}"
+ 	                    				 oncomplete="PF('membro').show()"  
+ 	                    				 update="@(.ui-dialog)"  
+ 	                    				 styleClass="btn-primary"  
+ 	                                     icon="fa fa-plus"/>  
+						</p:column>
+						<p:column>
+						</p:column>
+					</p:panelGrid>
+
+
+				</div>
+			</div>
+			
+			
+
+			<p:dialog header="Membro" widgetVar="membro" id="membro" height="540"
+                  	  width="640" responsive="true" styleClass="box-success">
+	             
+	             <div class="ui-fluid">
+	             <p:panelGrid  columns="2" layout="grid" rendered="#{cadastroFamiliaMB.membro!=null}">
+						
+						<p:outputLabel value="Nome" for="nomeM" />
+						<p:inputText id="nomeM"
+								value="#{cadastroFamiliaMB.membro.nome}" />
+						
+						<p:outputLabel value="Parentesco" for="parM" />
+						<p:selectOneMenu id="parM"
+							value="#{cadastroFamiliaMB.membro.parentesco}" >
+							<f:selectItems value="#{cadastroFamiliaMB.parentesco}" /> 
+						</p:selectOneMenu>
+						
+						<p:outputLabel for="nasM" value="Nascimento"/>
+                        <p:calendar id="nasM" showOn="both" value="#{cadastroFamiliaMB.membro.nascimento}"/>
+
+						<p:outputLabel value="Sexo" for="sexM" />
+						<p:selectOneMenu id="sexM"
+							value="#{cadastroFamiliaMB.membro.sexo}">
+							<f:selectItems value="#{cadastroFamiliaMB.sexo}" /> 
+						</p:selectOneMenu>
+
+						<p:outputLabel value="Estado Civil" for="estM" />
+						<p:selectOneMenu id="estM"
+							value="#{cadastroFamiliaMB.membro.estadoCivil}">
+							<f:selectItems value="#{cadastroFamiliaMB.estadoCivil}" />  
+						</p:selectOneMenu>
+
+						<p:outputLabel value="Nível Instrução" for="nivM" />
+						<p:selectOneMenu id="nivM"
+							value="#{cadastroFamiliaMB.membro.nivelInstrucao}">
+							<f:selectItems value="#{cadastroFamiliaMB.nivelInstrucao}" />  
+						</p:selectOneMenu>
+
+						<p:outputLabel value="Ocupação" for="ocuM" />
+						<p:selectOneMenu id="ocuM"
+							converter="entityConverter"
+							value="#{cadastroFamiliaMB.membro.ocupacao}">
+							<f:selectItems value="#{cadastroFamiliaMB.ocupacao}" var="ocup"
+										itemLabel="#{ocup.nome}" itemValue="#{ocup}" />
+						</p:selectOneMenu>
+
+						<p:outputLabel value="Tipo Documento" for="docM" />
+						<p:selectOneMenu id="docM"
+							value="#{cadastroFamiliaMB.membro.tipoDocumento}">
+							<f:selectItems value="#{cadastroFamiliaMB.tipoDocumento}" />  
+						</p:selectOneMenu>
+
+						<p:outputLabel value="Número Documento" for="numM" />
+						<p:inputText id="numM"
+								value="#{cadastroFamiliaMB.membro.numeroDocumento}" />
+
+						<p:outputLabel value="Previdencia Social" for="socM" />
+						<p:inputText id="socM"
+								value="#{cadastroFamiliaMB.membro.previdenciaSocial}" />
+
+						<p:outputLabel value="Saúde" for="sauM" />
+						<p:inputText id="sauM"
+								value="#{cadastroFamiliaMB.membro.saude}" />
+
+						
+				</p:panelGrid>
+					
+				<p:panelGrid columns="2" layout="grid">
+						<p:column>
+							 	<p:commandButton 
+							 		value="Confirmar" 
+							 		styleClass="btn-primary"  
+							 	 	actionListener="#{cadastroFamiliaMB.salvarMembro}"
+							 	 	oncomplete="handleRequest(xhr, status, args);" />  
+						</p:column>
+						<p:column>
+								<p:commandButton 
+									value="Cancelar" 
+									styleClass="btn-danger" 
+									actionListener="#{cadastroFamiliaMB.cancelarNovoMembro}" 
+									oncomplete="PF('membro').hide();" 
+									 />
+						</p:column>
+				</p:panelGrid>	
+				</div>
+
+						<script type="text/javascript">
+							function handleRequest(xhr, status, args) {
+								if (!args.validationFailed) {
+									PF('membro').hide();
+								} else {
+									jQuery('#form').effect("fade", {
+										times : 1
+									}, 300);
+								}
+							}
+						</script>
+
+				
+			</p:dialog>
+
+
+			
+		</h:form>
+		
+ 
+
+	</ui:define>
+
+</ui:composition>

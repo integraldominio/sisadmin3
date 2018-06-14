@@ -1,0 +1,115 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:adm="http://github.com/adminfaces"
+                template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="head-end">
+        <style type="text/css">
+            .ui-grid-row .ui-grid-col-2,
+            .ui-grid-row .ui-grid-col-10 {
+                padding: 0.5em 0;
+                margin-left: 10px;
+            }
+
+            .ui-orderlist .ui-orderlist-list {
+                height: auto;
+            }
+
+            .ui-orderlist .ui-grid-row .ui-grid-col-2,
+            .ui-orderlist .ui-grid-row .ui-grid-col-10 {
+                padding: 0;
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="title">
+        Pesquisa Família
+    </ui:define>
+
+    <ui:define name="description">
+        Pesquise as famílias de acordo com os filtros infomados 
+    </ui:define>
+
+    <ui:define name="body">
+        <adm:breadcrumb title="Pesquisa Família"/>
+
+			<h:form>
+            	<div class="box box-primary">
+                	<div class="box-header with-border">
+                    	<p:commandButton action="cadastro-familia?faces-redirect=true" ajax="false" icon="fa fa-plus"
+                         	            value="Novo" styleClass="btn-primary"/>
+                    	<p:spacer width="5"/>
+	                    <p:commandButton value="Excluir Selecionado(s)" icon="fa fa-trash" styleClass="btn-danger"
+	                                     action="#{listaFamiliaMB.excluirSelecionados()}" 
+	                                     process="@form" update="@form"/>
+	                                     
+<!-- 	                    <p:spacer width="5"/> -->
+<!-- 	                    <p:commandButton value="Olhar Selecionado(s)"  -->
+<!-- 	                    				 oncomplete="PF('tarefaSelecionadas').show()" -->
+<!-- 	                    				 update="@(.ui-dialog)"  -->
+<!-- 	                    				 styleClass="btn-info" -->
+<!-- 	                                     icon="fa fa-search"/> -->
+	                    <p:separator/>
+	                    
+	                    
+	                    <p:dataTable id="tarefaTable" widgetVar="tarefaTable" rows="10"
+	                    			 value="#{listaFamiliaMB.familias}" var="tarefa" rowKey="#{tarefa.id}"	                    			 
+	                                 paginator="true" selection="#{listaFamiliaMB.familiaSelecionadas}" 	                                 
+	                                 paginatorPosition="bottom"	                                 
+	                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+	                                 currentPageReportTemplate=""
+	                                 rowsPerPageTemplate="5,10,15,20,30">
+	
+	
+	
+	                        <p:column selectionMode="multiple" width="5%" styleClass="align-center"/>
+	                        
+	                        <p:column headerText="Nome Mãe"
+	                        		  filterBy="#{tarefa.nomeMae}" filterMatchMode="contains"
+	                        		  sortBy="#{tarefa.nomeMae}">
+	                        	<h:link value="#{tarefa.nomeMae}" outcome="cadastro-familia.xhtml">
+	                        		<f:param name="id" value="#{tarefa.id}"/>
+	                        	</h:link>
+	                        </p:column>	               
+	                        
+	                        <p:column headerText="Endereço"
+	                        		  filterBy="#{tarefa.endereco}" filterMatchMode="contains"
+	                        		  sortBy="#{tarefa.endereco}">
+	                        	<h:outputLabel value="#{tarefa.endereco}" />
+	                        </p:column>         
+	                        
+	                        <p:column headerText="Ponto Referência"
+	                        		  filterBy="#{tarefa.pontoReferencia}" filterMatchMode="contains"
+	                        		  sortBy="#{tarefa.pontoReferencia}">
+	                        	<h:outputLabel value="#{tarefa.pontoReferencia}" />
+	                        </p:column>         
+	                        
+	                        <p:column headerText="Situação"
+	                        		  filterBy="#{tarefa.situacao}" filterMatchMode="contains"
+	                        		  sortBy="#{tarefa.situacao}">
+	                        	<h:outputLabel value="#{tarefa.situacao}" />
+	                        </p:column>         
+	                        
+	                        	
+	                    </p:dataTable>
+					</div>
+	            </div>
+        	</h:form>
+        	
+        	<p:dialog header="Tarefas Selecionadas" widgetVar="tarefaSelecionadas" height="250"
+                  	  width="400" responsive="true" styleClass="box-success">
+	            <p:dataList id="listatarefaSelecionadas" value="#{listaFamiliaMB.familiaSelecionadas}" var="tarefa"
+	                        type="definition">
+	                        
+	                        ID: #{tarefa.id} - Mãe: #{tarefa.nomeMae} 
+
+	            </p:dataList>
+			</p:dialog>
+
+        
+    </ui:define>
+
+</ui:composition>

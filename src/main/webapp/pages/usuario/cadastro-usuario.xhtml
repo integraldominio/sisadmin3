@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces"
+                template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="title">
+        Cadastro Usuário
+    </ui:define>
+
+    <ui:define name="body">
+        <f:metadata>
+        	<f:viewParam name="id" value="#{cadastroUsuarioMB.id}" converter="javax.faces.Long"/>
+        	<f:event listener="#{cadastroUsuarioMB.inicializar()}" type="preRenderView"></f:event>
+        </f:metadata>
+
+        <adm:breadcrumb title="Cadastro Tarefa #{cadastroUsuarioMB.usuario.id}" link="cadastro-tarefa.xhtml?id=#{cadastroUsuarioMB.usuario.id}"/> 
+        <h:form id="form" prependId="false">
+            <p:focus/>
+
+			
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Salvar" update="@form"
+                        				 action="#{cadastroUsuarioMB.salvar()}"
+                                         icon="fa fa-check" styleClass="btn-primary"/>
+                        <p:spacer width="5"/>
+
+                        <p:commandButton value="Excluir" process="@this"
+                        				 rendered="#{cadastroUsuarioMB.usuario.editando}"
+                                         icon="fa fa-trash"
+                                         action="#{cadastroUsuarioMB.excluir()}"
+                                         styleClass="btn-danger">
+                        </p:commandButton>
+                        <p:spacer width="5"/>
+                        <p:commandButton value="Voltar"
+                                         action="lista-usuario?faces-redirect=true"
+                                         process="@this"
+                                         icon="fa fa-close"/>
+                                         
+                    </div>
+                    
+                    <p:splitButton value="Salvar" update="@form"
+                    			   action="#{cadastroUsuarioMB.salvar()}"
+                                   icon="fa fa-check"
+                                   styleClass="hidden-md hidden-lg btn-primary">
+                        <p:menuitem value="Excluir"
+                        			action="#{cadastroUsuarioMB.excluir()}"
+                        			rendered="#{cadastroUsuarioMB.usuario.editando}"
+                                    process="@this"
+                                    icon="fa fa-trash"/>
+                        <p:separator/>
+                        <p:menuitem value="Voltar"                        			
+                        		    action="lista-tarefa?faces-redirect=true" 
+                        			process="@this"
+                                    icon="fa fa-close"/>
+                    </p:splitButton>
+
+                    
+
+                    <p:separator/>
+
+                    <div class="ui-fluid">
+                    	<p:panelGrid id="capaPanel" columns="4" layout="grid">
+
+							<p:outputLabel value="Nome" for="nome"/>
+							<p:inputText id="nome" value="#{cadastroUsuarioMB.usuario.nome}"/>
+
+							<p:outputLabel value="login" for="login"/>
+							<p:inputText id="login" value="#{cadastroUsuarioMB.usuario.login}"/>
+
+							<p:outputLabel value="E-mail" for="email"/>
+							<p:inputText id="email" value="#{cadastroUsuarioMB.usuario.email}"/>
+							
+                    	</p:panelGrid>
+                    
+
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

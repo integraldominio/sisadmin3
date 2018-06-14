@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+
+	<ul class="sidebar-menu">
+		<li><p:link href="/index.xhtml">
+				<i class="fa fa-home"></i>
+				<span>Home</span>
+			</p:link></li>
+
+		<li class="header">Cadastros</li>
+
+		<ui:fragment rendered="#{logonMB.permissao('Familia')}">
+			<li><p:link href="/pages/familia/lista-familia.xhtml">
+					<i class="fa fa-address-book-o"></i>
+					<span>Família</span>
+				</p:link></li>
+		</ui:fragment>
+
+		<ui:fragment rendered="#{logonMB.permissao('Ocupacao')}">
+			<li><p:link href="/pages/ocupacao/lista-ocupacao.xhtml">
+					<i class="fa fa-edit"></i>
+					<span>Ocupação</span>
+				</p:link></li>
+		</ui:fragment>
+
+		<ui:fragment rendered="#{logonMB.permissao('Cidade')}">
+			<li><p:link href="/pages/ocupacao/lista-cidade.xhtml">
+					<i class="fa fa-edit"></i>
+					<span>Cidade</span>
+				</p:link></li>
+		</ui:fragment>
+
+		<ui:fragment rendered="#{logonMB.permissao('Bairro')}">
+			<li><p:link href="/pages/ocupacao/lista-bairro.xhtml">
+					<i class="fa fa-edit"></i>
+					<span>Bairro</span>
+				</p:link></li>
+		</ui:fragment>
+
+		<li class="header">Sistema</li>
+
+		<ui:fragment rendered="#{logonMB.permissao('Usuario')}">
+			<li><p:link href="/pages/usuario/lista-usuario.xhtml">
+					<i class="fa fa-user-o"></i>
+					<span>Usuário</span>
+				</p:link></li>
+		</ui:fragment>
+
+		<ui:fragment rendered="#{logonMB.permissao('Configuracao')}">
+			<li><p:link href="/pages/configuracao/configuracao.xhtml">
+					<i class="fa fa-cog"></i>
+					<span>Configuração</span>
+				</p:link></li>
+		</ui:fragment>
+
+		<li><p:link href="/logout.xhtml">
+				<i class="fa fa-sign-out"></i>
+				<span>Desconectar</span>
+			</p:link></li>
+
+	</ul>
+
+</ui:composition>

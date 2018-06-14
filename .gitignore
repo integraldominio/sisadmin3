@@ -1,3 +1,12 @@
+# eclipse
+*.project
+*.classpath
+*.settings
+*.settings/*
+
+# target
+target
+
 # Compiled class file
 *.class
 
