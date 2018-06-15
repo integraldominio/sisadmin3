@@ -4,7 +4,7 @@
 A simple project to get you started with https://github.com/adminfaces[AdminFaces^].
 
 .Login page
-![](https://github.com/integraldominio/sisadmin3/image:starter1.png)
+image:starter1.png[]
 
 .Car list
 ![](https://github.com/integraldominio/sisadmin3/image:starter2.png)
